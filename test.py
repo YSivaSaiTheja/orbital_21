@@ -1,7 +1,5 @@
 # Initial plan algorithm before optimization
 def generate_plan(prog_dict, prereq_dict, maj_dict, taken_mods_list, progs_to_take_list, commonly_mapped_dict, last_sem, maj):
-    # A boolean flag that determines if student has decided to go on an exchange program or not
-    exchange_flag = False
     # First step is to determine how many semesters to plan for, check how many programs are inputted, and based on this, determine last program to take
     last_prog_to_take = progs_to_take_list[-1]
     num_of_sems_to_plan = 0
@@ -9,7 +7,7 @@ def generate_plan(prog_dict, prereq_dict, maj_dict, taken_mods_list, progs_to_ta
         num_of_sems_to_plan = last_prog_to_take[1] - last_sem - 1
     else: # Last program to be taken is an exchange program
         num_of_sems_to_plan = last_prog_to_take[1] - last_sem
-        exchange_flag = True
+
     
     sem_counter = 0
     # Plan that is to be returned
