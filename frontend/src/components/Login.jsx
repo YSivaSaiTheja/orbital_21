@@ -1,25 +1,53 @@
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../constants/api';
+import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
-  
-const Login = () => {
+const Login = (props) => {
     // Taking care of states of input fields (NUSNET data)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
 
-    // Function to validate form 
-    const validateForm = () => {
-        if (!email || !password) {
-            console.log('Enter Deets')
+
+    // Function to handle the submit event
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const payload={
+            "email": email,
+            "password": password,
         }
-        return // Check carried out here to see if user exists in database
+        axios.post(API_BASE_URL +'login', payload)
+            .then(function (response) {
+                if (response.data.code === 200){
+                    localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                    redirectToHome();
+                    props.showError(null)
+                }
+                else if (response.data.code === 204){
+                    props.showError("Username and password do not match");
+                }
+                else{
+                    props.showError("Username does not exists");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
-    // Function to handle the submit event 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const redirectToHome = () => {
+        props.history.push('/');
+    }
+
+    const redirectToRegister = () => {
+        props.history.push('/register');
+    }
+
+    function validateForm() {
+        return email.length > 0 && password.length > 0;
     }
 
     return (
@@ -41,14 +69,16 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}/>
                 </Form.Group>
                 <Form.Group controlId="rmbMe" size='lg'>
-                    <Form.Check type="checkbox" label="Remember Me" value={rememberMe} checked={rememberMe} 
+                    <Form.Check type="checkbox" label="Remember Me" value={rememberMe} checked={rememberMe}
                     onChange={(e) => setRememberMe(e.currentTarget.checked)} />
-                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
-                    Login
+                </Form.Group>
+                <Button variant="link" onClick={() => redirectToRegister()}>Don't have an account?</Button>
+                <Button block size="lg" type="submit" onClick = {handleSubmit} disabled={!validateForm()}>
+                    login
                 </Button>
         </div>
     )
 }
 
-export default Login;
+export default withRouter(Login);
+

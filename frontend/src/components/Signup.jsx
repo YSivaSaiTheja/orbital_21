@@ -1,29 +1,55 @@
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react'
 import { Button } from 'react-bootstrap'
+import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../constants/api';
+import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
-  
-const Signup = () => {
+const Signup = (props) => {
     // Taking care of states of input fields
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [cfmPassword, setCfmPassword] = useState('')
 
-    // Function to validate form 
-    const validateForm = () => {
-        if (!email || !password || !cfmPassword) {
-            alert('Please enter all your details')
+    const handleSubmit = (e) => {
+        console.log("Button pressed");
+        e.preventDefault();
+        if(password === cfmPassword) {
+            sendDetailsToServer()
+        } else {
+            props.showError('Passwords do not match');
         }
-        return password === cfmPassword
     }
 
-    // Function to handle the submit event 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const sendDetailsToServer = () => {
+        const payload={
+            "email":email,
+            "password":password,
+        }
+        axios.post(API_BASE_URL+'/register', payload)
+            .then(function (response) {
+                 if(response.status === 200){
+                    localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                    redirectToLogin();
+                } else{
+                    props.showError("Some error ocurred");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const redirectToLogin = () => {
+        props.history.push('/login');
+    }
+
+    function validateForm() {
+        return email.length > 0 && password.length > 0;
     }
 
     return (
-        <div className='login'>
+        <div className='Register'>
             <Form onSubmit={handleSubmit}/>
                 <Form.Group size="lg" controlId="email">
                     <Form.Label>Email</Form.Label>
@@ -47,11 +73,11 @@ const Signup = () => {
                         value={cfmPassword}
                         onChange={(e) => setCfmPassword(e.target.value)}/>
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <Button block size="lg" type="submit" onClick = {handleSubmit} disabled={!validateForm()} >
                     Sign Up
                 </Button>
         </div>
     )
 }
 
-export default Signup;
+export default withRouter(Signup);

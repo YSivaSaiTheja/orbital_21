@@ -18,4 +18,9 @@ const moduleSchema = new Schema({
 
 moduleSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model("ModulesInfo", moduleSchema, 'ModulesInfo');
+module.exports = mongoose.model("computingModules", moduleSchema, 'computingModules');
+
+
+
+
+
