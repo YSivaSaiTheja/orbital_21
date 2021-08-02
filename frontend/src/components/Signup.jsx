@@ -1,7 +1,7 @@
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react'
 import { Button } from 'react-bootstrap'
-import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../constants/api';
+// import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../constants/api';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
 
@@ -26,19 +26,28 @@ const Signup = (props) => {
             "email":email,
             "password":password,
         }
-        axios.post(API_BASE_URL+'/register', payload)
-            .then(function (response) {
-                 if(response.status === 200){
-                    localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+        axios.post('http://localhost:3001/register', payload)
+            .then((response) => {
+                try {
+                    console.log("Post went through");
+                    console.log(response.data.status);
                     redirectToLogin();
-                } else{
-                    props.showError("Some error ocurred");
+                } catch (err) {
+                    console.log(err.message);
                 }
-            })
-            .catch(function (error) {
-                console.log(error);
             });
-    }
+        }
+    //              if(response.status === 200){
+    //                 localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+    //                 redirectToLogin();
+    //             } else{
+    //                 props.showError("Some error ocurred");
+    //             }
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+
 
     const redirectToLogin = () => {
         props.history.push('/login');

@@ -6,6 +6,23 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 
+const register = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const newUser = new User({
+    email,
+    password,
+  });
+
+  try {
+    await newUser.save();
+    console.log("registered successfully");
+    res.status(201);
+  } catch (err) {
+    return next(new DatabaseError(err.message));
+  }
+
+};
 
 
 const login = async (req, res, next) => {

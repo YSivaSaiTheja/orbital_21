@@ -3,7 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, dropDups: true },
     password: { type: String, required: true },
 })
 
@@ -11,4 +11,4 @@ const userSchema = new Schema({
 userSchema.plugin(uniqueValidator);
 
 // collection will be named 'users' by default
-module.exports = mongoose.model("Users", userSchema);
+module.exports = mongoose.model('Users', userSchema);
