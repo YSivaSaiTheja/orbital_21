@@ -19,7 +19,7 @@ const Login = (props) => {
             "email": email,
             "password": password,
         }
-        axios.post('http://localhost:3001/login', payload)
+        axios.post('http://localhost:3001/user/login', payload)
             .then((response) => {
                 try {
                     if (response.data.validCredentials === true) {
@@ -33,23 +33,6 @@ const Login = (props) => {
                 };
             })
         }
-
-            //     if (response.data.code === 200){
-            //         localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
-            //         redirectToHome();
-            //         props.showError(null)
-            //     }
-            //     else if (response.data.code === 204){
-            //         props.showError("Username and password do not match");
-            //     }
-            //     else{
-            //         props.showError("Username does not exists");
-            //     }
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-
 
     const redirectToHome = () => {
         props.history.push('/');

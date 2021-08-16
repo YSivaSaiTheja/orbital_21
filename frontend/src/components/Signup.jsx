@@ -26,7 +26,7 @@ const Signup = (props) => {
             "email":email,
             "password":password,
         }
-        axios.post('http://localhost:3001/register', payload)
+        axios.post('http://localhost:3001/user/register', payload)
             .then((response) => {
                 try {
                     console.log("Post went through");
@@ -37,17 +37,6 @@ const Signup = (props) => {
                 }
             });
         }
-    //              if(response.status === 200){
-    //                 localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
-    //                 redirectToLogin();
-    //             } else{
-    //                 props.showError("Some error ocurred");
-    //             }
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-
 
     const redirectToLogin = () => {
         props.history.push('/login');

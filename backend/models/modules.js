@@ -14,7 +14,7 @@ const moduleSchema = new Schema({
     workload: { type: [Number], required: true},
     attributes: { type: Map },
     semesterDate: {type: Array},
-});
+}, {collection: "computingModules"});
 
 moduleSchema.plugin(uniqueValidator);
 

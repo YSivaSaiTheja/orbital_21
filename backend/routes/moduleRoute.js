@@ -200,6 +200,8 @@ router.route('/post').post(async (req, res) => {
     sepList.shift()
     iipList.shift()
 
+    console.log(completedSems)
+
     const dbObj = await createDatabaseObj()
     try {
         let allocation = allocate(takenList, progList, sepList, iipList, numCompleted, dbObj)

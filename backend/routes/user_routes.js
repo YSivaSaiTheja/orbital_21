@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const User = require("../models/users");
 const DatabaseError = require("../models/databaseError");
 
-
-// router.post('/login', userController.login);
 router.post("/register", async (req, res, next) => {
   const { email, password } = req.body;
 

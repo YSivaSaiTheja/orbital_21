@@ -7,15 +7,17 @@ import ProgramList from './ProgramList'
 import SEPList from './SEPList'
 import IIPList from './IIPList'
 import axios from 'axios';
+import {useHistory} from 'react-router'
 
 const Inputs = () => {
     // State variable to keep track of major
     const [major, setMajor] = useState('')
+    const history = useHistory()
 
     const [modList, setModList] = useState([
         {
-            id: 1, 
-            mod: 'Dummy (Please delete)', 
+            id: 1,
+            mod: 'Dummy (Please delete)',
             grade: 'A'
         }
     ])
@@ -24,7 +26,7 @@ const Inputs = () => {
     const [progList, setProgList] = useState([
         {
             id: 2,
-            progName: 'Dummy (Please delete)', 
+            progName: 'Dummy (Please delete)',
             semester: 1
         }
     ])
@@ -32,7 +34,7 @@ const Inputs = () => {
     // State to keep track of the list of SEP mods to take
     const [sepList, setSEPList] = useState([
         {
-            id: 3, 
+            id: 3,
             modName: 'Dummy (Please delete)'
         }
     ])
@@ -40,7 +42,7 @@ const Inputs = () => {
     // State to keep track of the list of IIP mods to take
     const [iipList, setIIPList] = useState([
         {
-            id: 4, 
+            id: 4,
             modName: 'Dummy (Please delete)'
         }
     ])
@@ -48,12 +50,12 @@ const Inputs = () => {
     // Control state of how many mods to be added
     const [sems, setSem] = useState(0)
 
-    // Function to add a new module 
+    // Function to add a new module
     const addMod = (modData) => {
         const id = Math.floor(Math.random() * 100) + 1
         const newMod = {id, ...modData}
         setModList([...modList, newMod])
-    } 
+    }
 
     // Function to remove a module
     const deleteMod = (id) => {
@@ -62,7 +64,7 @@ const Inputs = () => {
         )))
     }
 
-    // Function to add program, note to take care of semester data as well 
+    // Function to add program, note to take care of semester data as well
     const addProg = prog => {
         const id = Math.floor(Math.random() * 100) + 1
         const newProg = {id, ...prog}
@@ -76,7 +78,7 @@ const Inputs = () => {
         )))
     }
 
-    // Function to add SEP module 
+    // Function to add SEP module
     const addSEPMod = (sepMod) => {
         const id = Math.floor(Math.random() * 100) + 1
         const newSEP = {id, ...sepMod}
@@ -104,18 +106,24 @@ const Inputs = () => {
         )))
     }
 
-    const handleClick = (e) => {
+    const handleClick = async (e) => {
         e.preventDefault()
         const allModData = {
             major: major,
             sems : sems,
-            takenList : modList, 
-            progList : progList, 
+            takenList : modList,
+            progList : progList,
             sepList : sepList,
             iipList : iipList
         }
 
-        axios.get('http://localhost:3001/plan', allModData)
+        try {
+            axios.post('http://localhost:3001/post', allModData).then((res) => {
+                history.push('/plan', {state: res.data})
+            })
+        } catch(err) {
+            console.log(err.response.data);
+        }
     }
 
     return (
